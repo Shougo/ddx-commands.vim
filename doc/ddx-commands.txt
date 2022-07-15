@@ -1,0 +1,65 @@
+*ddx-commands.txt*	Commands for ddx.vim
+
+Author: Shougo <Shougo.Matsu at gmail.com>
+License: MIT license
+
+CONTENTS						*ddx-commands-contents*
+
+Introduction		|ddx-commands-introduction|
+Install			|ddx-commands-install|
+Examples		|ddx-commands-examples|
+Commands		|ddx-commands-commands|
+
+
+==============================================================================
+INTRODUCTION					*ddx-commands-introduction*
+
+This plugin adds the commands for ddx.vim.
+
+
+==============================================================================
+INSTALL							*ddx-commands-install*
+
+Please install both "ddx.vim" and "denops.vim".
+
+https://github.com/Shougo/ddx.vim
+https://github.com/vim-denops/denops.vim
+
+
+==============================================================================
+EXAMPLES						*ddx-commands-examples*
+>
+	" Change input option
+	ddx -input=foo
+
+	" Use ui param
+	ddx -ui-param-startFilter=v:true
+<
+
+==============================================================================
+COMMANDS						*ddx-commands-commands*
+
+							*:ddx*
+:ddx [{options}]
+		Creates a new ddx buffer.
+		This can be done by specifying the list on the command line,
+		separated by spaces.
+
+		ddx can accept ui options or params.
+		It must be "-{ui}-{name}={value}"  or
+		"-{ui}-param-{name}={value}" format.
+		Note: If you omit {value}, |v:true| is used instead.
+
+		You can use evaluation cmdline by ``.
+		Note: In the evaluation, The special characters(spaces,  "\")
+		are escaped automatically.
+>
+        :ddx -name=search%`bufnr('%')`<CR>
+<
+		{options} are options for ddx buffer: |ddx-options|
+		It must be "-{name}={value}" format.
+		Note: If you omit {value}, |v:true| is used instead.
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
