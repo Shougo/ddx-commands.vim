@@ -3,7 +3,7 @@ function! ddx#commands#complete(arglead, cmdline, cursorpos) abort
   let options = keys(filter(ddx#custom#get_default_options(),
         \ { _, val -> type(val) == v:t_bool || type(val) == v:t_string }))
   let _ = map(options, { _, val -> '-' . val . '=' }) + [
-        \ '-ui-option-', '-ui-param-',
+        \   '-ui-option-', '-ui-param-',
         \ ]
 
   return uniq(sort(filter(_, { _, val -> stridx(val, a:arglead) == 0 })))
@@ -43,10 +43,10 @@ function! ddx#commands#_parse_options_args(cmdline) abort
   endfor
 
   if !empty(ui_options)
-    let options.uiOptions = { '_': ui_options }
+    let options.uiOptions = #{ _: ui_options }
   endif
   if !empty(ui_params)
-    let options.uiParams = { '_': ui_params }
+    let options.uiParams = #{ _: ui_params }
 
     if has_key(options, 'ui')
       let options.uiParams[options.ui] = ui_params
