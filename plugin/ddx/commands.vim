@@ -1,4 +1,4 @@
-if exists('g:loaded_ddx_commands')
+if 'g:loaded_ddx_commands'->exists()
   finish
 endif
 let g:loaded_ddx_commands = 1
