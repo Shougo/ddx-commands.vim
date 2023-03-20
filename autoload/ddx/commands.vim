@@ -1,9 +1,9 @@
 function! ddx#commands#complete(arglead, cmdline, cursorpos) abort
   " Option names completion.
-  let options = ddx#custom#get_default_options()->filter(
+  const options = ddx#custom#get_default_options()->filter(
         \ { _, val -> val->type() == v:t_bool
         \   || val->type() == v:t_string })->keys()
-  let _ = options->map({ _, val -> '-' .. val .. '=' }) + [
+  const _ = options->map({ _, val -> '-' .. val .. '=' }) + [
         \   '-ui-option-', '-ui-param-',
         \ ]
 
@@ -11,8 +11,7 @@ function! ddx#commands#complete(arglead, cmdline, cursorpos) abort
 endfunction
 
 function! ddx#commands#call(args) abort
-  let options = ddx#commands#_parse_options_args(a:args)
-  call ddx#start(options)
+  call ddx#start(ddx#commands#_parse_options_args(a:args))
 endfunction
 
 function! ddx#commands#_parse_options_args(cmdline) abort
@@ -80,7 +79,7 @@ function! s:parse_options(cmdline) abort
   let options = {}
 
   " Eval
-  let cmdline = (a:cmdline =~# '\\\@<!`.*\\\@<!`') ?
+  const cmdline = (a:cmdline =~# '\\\@<!`.*\\\@<!`') ?
         \ s:eval_cmdline(a:cmdline) : a:cmdline
 
   for s in cmdline->split(s:re_unquoted_match('\%(\\\@<!\s\)\+'))
