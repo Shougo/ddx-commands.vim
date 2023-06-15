@@ -1,4 +1,4 @@
-function! ddx#commands#complete(arglead, cmdline, cursorpos) abort
+function ddx#commands#complete(arglead, cmdline, cursorpos) abort
   " Option names completion.
   let options = ddx#custom#get_default_options()->filter(
         \ { _, val -> val->type() == v:t_bool
@@ -10,11 +10,11 @@ function! ddx#commands#complete(arglead, cmdline, cursorpos) abort
   return _->filter({ _, val -> val->stridx(a:arglead) == 0 })->sort()->uniq()
 endfunction
 
-function! ddx#commands#call(args) abort
+function ddx#commands#call(args) abort
   call ddx#start(ddx#commands#_parse_options_args(a:args))
 endfunction
 
-function! ddx#commands#_parse_options_args(cmdline) abort
+function ddx#commands#_parse_options_args(cmdline) abort
   let ui_options = {}
   let ui_params = {}
   let [args, options] = s:parse_options(a:cmdline)
@@ -55,14 +55,14 @@ function! ddx#commands#_parse_options_args(cmdline) abort
 
   return options
 endfunction
-function! s:re_unquoted_match(match) abort
+function s:re_unquoted_match(match) abort
   " Don't match a:match if it is located in-between unescaped single or double
   " quotes
   return a:match .. '\v\ze([^"' .. "'" .. '\\]*(\\.|"([^"\\]*\\.)*[^"\\]*"|'
         \ .. "'" .. '([^' .. "'" .. '\\]*\\.)*[^' .. "'" .. '\\]*' .. "'"
         \ .. '))*[^"' .. "'" .. ']*$'
 endfunction
-function! s:remove_quote_pairs(s) abort
+function s:remove_quote_pairs(s) abort
   " remove leading/ending quote pairs
   let s = a:s
   if s[0] ==# '"' && s[len(s) - 1] ==# '"'
@@ -74,7 +74,7 @@ function! s:remove_quote_pairs(s) abort
   endif
   return s
 endfunction
-function! s:parse_options(cmdline) abort
+function s:parse_options(cmdline) abort
   let args = []
   let options = {}
 
@@ -103,7 +103,7 @@ function! s:parse_options(cmdline) abort
 
   return [args, options]
 endfunction
-function! s:eval_cmdline(cmdline) abort
+function s:eval_cmdline(cmdline) abort
   let cmdline = ''
   let prev_match = 0
   let eval_pos = a:cmdline->match('\\\@<!`.\{-}\\\@<!`')
@@ -124,7 +124,7 @@ function! s:eval_cmdline(cmdline) abort
   return cmdline
 endfunction
 
-function! s:print_error(string, name = 'ddu') abort
+function s:print_error(string, name = 'ddu') abort
   echohl Error
   echomsg printf('[%s] %s', a:name,
         \ a:string->type() ==# v:t_string ? a:string : a:string->string())
