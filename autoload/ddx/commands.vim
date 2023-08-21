@@ -7,7 +7,7 @@ function ddx#commands#complete(arglead, cmdline, cursorpos) abort
         \   '-ui-option-', '-ui-param-',
         \ ]
 
-  return _->filter({ _, val -> val->stridx(a:arglead) == 0 })->sort()->uniq()
+  return _->sort()->uniq()->join("\n")
 endfunction
 
 function ddx#commands#call(args) abort
