@@ -42,10 +42,10 @@ function ddx#commands#_parse_options_args(cmdline) abort
     endif
   endfor
 
-  if !(ui_options->empty())
+  if !ui_options->empty()
     let options.uiOptions = #{ _: ui_options }
   endif
-  if !(ui_params->empty())
+  if !ui_params->empty()
     let options.uiParams = #{ _: ui_params }
 
     if options->has_key('ui')
