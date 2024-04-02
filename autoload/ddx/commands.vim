@@ -124,9 +124,8 @@ function s:eval_cmdline(cmdline) abort
   return cmdline
 endfunction
 
-function s:print_error(string, name = 'ddu') abort
+function s:print_error(string, name = 'ddx') abort
   echohl Error
-  echomsg printf('[%s] %s', a:name,
-        \ a:string->type() ==# v:t_string ? a:string : a:string->string())
+  echomsg printf('[%s] %s', a:name, a:string->string())
   echohl None
 endfunction
