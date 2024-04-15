@@ -38,7 +38,7 @@ function ddx#commands#_parse_options_args(cmdline) abort
         let ui_{option_or_param}s[name] = value
       endif
     elseif arg[0] ==# '-'
-      call s:print_error(printf('option "%s": is invalid.', arg))
+      call ddx#util#print_error(printf('option "%s": is invalid.', arg))
     endif
   endfor
 
@@ -122,10 +122,4 @@ function s:eval_cmdline(cmdline) abort
   endif
 
   return cmdline
-endfunction
-
-function s:print_error(string, name = 'ddx') abort
-  echohl Error
-  echomsg printf('[%s] %s', a:name, a:string->string())
-  echohl None
 endfunction
