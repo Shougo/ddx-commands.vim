@@ -1,8 +1,10 @@
 function ddx#commands#complete(arglead, cmdline, cursorpos) abort
   " Option names completion.
-  let options = ddx#custom#get_default_options()->filter(
-        \ { _, val -> val->type() == v:t_bool
-        \   || val->type() == v:t_string })->keys()
+  let options = ddx#custom#get_default_options()->filter({ _, val ->
+        \      val->type() == v:t_bool
+        \   || val->type() == v:t_number
+        \   || val->type() == v:t_string
+        \ })->keys()
   let _ = options->map({ _, val -> '-' .. val .. '=' }) + [
         \   '-ui-option-', '-ui-param-',
         \ ]
