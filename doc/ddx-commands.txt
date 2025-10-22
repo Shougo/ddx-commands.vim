@@ -3,7 +3,7 @@
 Author: Shougo <Shougo.Matsu at gmail.com>
 License: MIT license
 
-CONTENTS						*ddx-commands-contents*
+CONTENTS                                               *ddx-commands-contents*
 
 Introduction		|ddx-commands-introduction|
 Install			|ddx-commands-install|
@@ -12,13 +12,13 @@ Commands		|ddx-commands-commands|
 
 
 ==============================================================================
-INTRODUCTION					*ddx-commands-introduction*
+INTRODUCTION                                       *ddx-commands-introduction*
 
 This plugin adds the commands for ddx.vim.
 
 
 ==============================================================================
-INSTALL							*ddx-commands-install*
+INSTALL                                                 *ddx-commands-install*
 
 Please install both "ddx.vim" and "denops.vim".
 
@@ -27,20 +27,16 @@ https://github.com/vim-denops/denops.vim
 
 
 ==============================================================================
-EXAMPLES						*ddx-commands-examples*
->
-	" Change input option
-	ddx -input=foo
-
-	" Use ui param
-	ddx -ui-param-startFilter=v:true
+EXAMPLES                                               *ddx-commands-examples*
+>vim
+	Ddx -path=foo.zip
 <
 
 ==============================================================================
-COMMANDS						*ddx-commands-commands*
+COMMANDS                                               *ddx-commands-commands*
 
-							*:ddx*
-:ddx [{options}]
+                                                                        *:Ddx*
+:Ddx [{options}]
 		Creates a new ddx buffer.
 		This can be done by specifying the list on the command line,
 		separated by spaces.
@@ -53,8 +49,8 @@ COMMANDS						*ddx-commands-commands*
 		You can use evaluation cmdline by ``.
 		Note: In the evaluation, The special characters(spaces,  "\")
 		are escaped automatically.
->
-        :ddx -name=search%`bufnr('%')`<CR>
+>vim
+        :Ddx -name=search%`bufnr('%')`<CR>
 <
 		{options} are options for ddx buffer: |ddx-options|
 		It must be "-{name}={value}" format.
