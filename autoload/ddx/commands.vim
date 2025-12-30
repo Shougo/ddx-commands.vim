@@ -1,6 +1,7 @@
 function ddx#commands#complete(arglead, cmdline, cursorpos) abort
   " Option names completion.
-  let options = ddx#custom#get_default_options()->filter({ _, val ->
+  let options = ddx#custom#get_default_options()
+        \ ->filter({ _, val ->
         \      val->type() == v:t_bool
         \   || val->type() == v:t_number
         \   || val->type() == v:t_string
@@ -9,7 +10,21 @@ function ddx#commands#complete(arglead, cmdline, cursorpos) abort
         \   '-ui-option-', '-ui-param-',
         \ ]
 
-  return _->sort()->uniq()->join("\n")
+  if stridx(a:arglead, '-path=') ==# 0
+    " Use path completion
+
+    " Extract the path prefix from `a:arglead`
+    const path_prefix = a:arglead->substitute('^-path=', '', '')
+
+    " Handle special cases: Expand `~` for home directory and process relative
+    " paths
+    const expanded_path = path_prefix->expand(v:true)
+
+    " Use `glob()` to get matching files and directories
+    return (expanded_path .. '*')->glob(v:false, v:true)
+  endif
+
+  return _->sort()->uniq()
 endfunction
 
 function ddx#commands#call(args) abort
