@@ -10,11 +10,12 @@ function ddx#commands#complete(arglead, cmdline, cursorpos) abort
         \   '-ui-option-', '-ui-param-',
         \ ]
 
-  if stridx(a:arglead, '-path=') ==# 0
+  const path_pattern = '^-\%(path\|anotherPath\)='
+  if a:arglead =~# path_pattern
     " Use path completion
 
     " Extract the path prefix from `a:arglead`
-    const path_prefix = a:arglead->substitute('^-path=', '', '')
+    const path_prefix = a:arglead->substitute(path_pattern, '', '')
 
     " Handle special cases: Expand `~` for home directory and process relative
     " paths
