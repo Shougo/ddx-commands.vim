@@ -3,25 +3,25 @@
 
 function Test_parse_options_args() abort
   call assert_equal(
+        \ ddx#commands#_parse_options_args('-ui-option-foo=bar'),
         \ #{
         \   uiOptions: #{ _: #{ foo: 'bar' } },
-        \ },
-        \ ddx#commands#_parse_options_args('-ui-option-foo=bar'))
+        \ })
   call assert_equal(
+        \ ddx#commands#_parse_options_args('foo -ui-param-foo=bar'),
         \ #{
         \   uiParams: #{ _: #{ foo: 'bar' } },
-        \ },
-        \ ddx#commands#_parse_options_args('foo -ui-param-foo=bar'))
+        \ })
 
   " If omit value, v:true is used
   call assert_equal(
+        \ ddx#commands#_parse_options_args('-resume'),
         \ #{
         \   resume: v:true,
-        \ },
-        \ ddx#commands#_parse_options_args('-resume'))
+        \ })
   call assert_equal(
+        \ ddx#commands#_parse_options_args('-ui-param-foo'),
         \ #{
         \   uiParams: #{ _: #{ foo: v:true } },
-        \ },
-        \ ddx#commands#_parse_options_args('-ui-param-foo'))
+        \ })
 endfunction
