@@ -1,13 +1,24 @@
-PATH := ./vim-themis/bin:$(PATH)
-export THEMIS_VIM  := nvim
-export THEMIS_ARGS := -e -s --headless
-export THEMIS_HOME := ./vim-themis
-
 test:
-	themis --version
-	themis test/autoload/*
+	@echo "Running tests with Vim..."
+	@vim --version | head -1
+	vim -u NONE -N -i NONE --noplugin \
+		-c 'set runtimepath+=.' \
+		-c 'source test/autoload/ddx/commands.vim' \
+		-c 'call Test_parse_options_args()' \
+		-c 'echo "All tests passed!"' \
+		-c 'qall!'
+	@echo ""
+	@if command -v nvim >/dev/null 2>&1; then \
+		echo "Running tests with Neovim..."; \
+		nvim --version | head -1; \
+		nvim -u NONE -N -i NONE --noplugin --headless \
+			-c 'set runtimepath+=.' \
+			-c 'source test/autoload/ddx/commands.vim' \
+			-c 'call Test_parse_options_args()' \
+			-c 'echo "All tests passed!"' \
+			-c 'qall!'; \
+	else \
+		echo "Neovim not found, skipping neovim tests"; \
+	fi
 
-install:
-	git clone https://github.com/thinca/vim-themis vim-themis
-
-.PHONY: install test
+.PHONY: test

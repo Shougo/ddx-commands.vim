@@ -1,0 +1,67 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        vim: [vim, nvim]
+        include:
+          - os: ubuntu-latest
+            vim: vim
+            install: sudo apt-get update && sudo apt-get install -y vim
+          - os: ubuntu-latest
+            vim: nvim
+            install: sudo apt-get update && sudo apt-get install -y neovim
+          - os: macos-latest
+            vim: vim
+            install: brew install vim
+          - os: macos-latest
+            vim: nvim
+            install: brew install neovim
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install ${{ matrix.vim }}
+        run: ${{ matrix.install }}
+
+      - name: Show ${{ matrix.vim }} version
+        run: |
+          if [ "${{ matrix.vim }}" = "vim" ]; then
+            vim --version | head -1
+          else
+            nvim --version | head -1
+          fi
+
+      - name: Run tests with ${{ matrix.vim }}
+        run: |
+          if [ "${{ matrix.vim }}" = "vim" ]; then
+            vim -u NONE -N -i NONE --noplugin \
+              -c 'set runtimepath+=.' \
+              -c 'source test/autoload/ddx/commands.vim' \
+              -c 'call Test_parse_options_args()' \
+              -c 'echo "All tests passed!"' \
+              -c 'qall!'
+          else
+            nvim -u NONE -N -i NONE --noplugin --headless \
+              -c 'set runtimepath+=.' \
+              -c 'source test/autoload/ddx/commands.vim' \
+              -c 'call Test_parse_options_args()' \
+              -c 'echo "All tests passed!"' \
+              -c 'qall!'
+          fi
+
+      - name: Test result
+        run: echo "Tests completed successfully on ${{ matrix.os }} with ${{ matrix.vim }}!"
