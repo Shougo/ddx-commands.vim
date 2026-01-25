@@ -4,66 +4,63 @@ on:
   push:
     branches:
       - main
-      - master
   pull_request:
+    branches:
+      - main
 
 jobs:
   test:
+    name: Test on ${{ matrix.editor }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        vim: [vim, nvim]
-        include:
-          - os: ubuntu-latest
-            vim: vim
-            install: sudo apt-get update && sudo apt-get install -y vim
-          - os: ubuntu-latest
-            vim: nvim
-            install: sudo apt-get update && sudo apt-get install -y neovim
-          - os: macos-latest
-            vim: vim
-            install: brew install vim
-          - os: macos-latest
-            vim: nvim
-            install: brew install neovim
-
-    runs-on: ${{ matrix.os }}
+        os: [ubuntu-latest]
+        editor:
+          - vim
+          - neovim
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install ${{ matrix.vim }}
-        run: ${{ matrix.install }}
+      - name: Setup Vim
+        if: matrix.editor == 'vim'
+        uses: rhysd/action-setup-vim@v1
+        with:
+          version: v9.1.0900
 
-      - name: Show ${{ matrix.vim }} version
+      - name: Setup Neovim
+        if: matrix.editor == 'neovim'
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: v0.11.0
+
+      - name: Verify Vim version
+        if: matrix.editor == 'vim'
         run: |
-          if [ "${{ matrix.vim }}" = "vim" ]; then
-            vim --version | head -1
-          else
-            nvim --version | head -1
-          fi
+          vim --version
+          echo "Vim version info:"
+          vim --version | head -3
 
-      - name: Run tests with ${{ matrix.vim }}
+      - name: Verify Neovim version
+        if: matrix.editor == 'neovim'
         run: |
-          if [ "${{ matrix.vim }}" = "vim" ]; then
-            vim -u NONE -N -i NONE --noplugin \
-              -c 'set runtimepath+=.' \
-              -c 'source test/autoload/ddx/commands.vim' \
-              -c 'call Test_parse_options_args()' \
-              -c 'echo "All tests passed!"' \
-              -c 'qall!'
-          else
-            nvim -u NONE -N -i NONE --noplugin --headless \
-              -c 'set runtimepath+=.' \
-              -c 'source test/autoload/ddx/commands.vim' \
-              -c 'call Test_parse_options_args()' \
-              -c 'echo "All tests passed!"' \
-              -c 'qall!'
-          fi
+          nvim --version
+          echo "Neovim version info:"
+          nvim --version | head -3
 
-      - name: Test result
-        run: echo "Tests completed successfully on ${{ matrix.os }} with ${{ matrix.vim }}!"
+      - name: Run tests (Vim)
+        if: matrix.editor == 'vim'
+        run: make test
+        env:
+          VIM: vim
+
+      - name: Run tests (Neovim)
+        if: matrix.editor == 'neovim'
+        run: make test
+        env:
+          VIM: nvim
